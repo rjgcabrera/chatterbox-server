@@ -11,8 +11,8 @@ var defaultCorsHeaders = {
 
 var objId = 1;
 var messages = [{
-  username: 'Ron',
-  text: 'Hi, Harry',
+  username: 'Jono',
+  text: 'Do my bidding!',
   roomname: 'lobby',
   objectId: objId
 }];
@@ -24,21 +24,32 @@ var requestHandler = function(request, response) {
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
   if (request.method === 'GET') {
-    
+    var statusCode = 200; 
+    var headers = defaultCorsHeaders;
   
-  var test = url.parse(request.url);
-  
-  console.log(test);
+    var test = url.parse(request.url);
+    if (test.pathname !== '/classes/messages') {
+      statusCode = 404;
+      response.writeHead(statusCode, headers);
+      response.end('Error');
+    } else {
+      statusCode = 200;
+      response.writeHead(statusCode, headers);
+      response.end(JSON.stringify({
+      results: messages
+      }));  
+    }
     
     // The outgoing status.
-  var statusCode = 200;
+  
 
   // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
+    
+    
+    
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
@@ -46,9 +57,6 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end(JSON.stringify({
-    results: messages
-  }));
   
   } else if (request.method === 'POST') {
     //TODO: POST handler
