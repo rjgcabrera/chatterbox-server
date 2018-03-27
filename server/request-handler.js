@@ -24,7 +24,7 @@ var requestHandler = function(request, response) {
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
   if (request.method === 'GET') {
-    var statusCode = 200; 
+    var statusCode; 
     var headers = defaultCorsHeaders;
   
     var test = url.parse(request.url);
@@ -36,7 +36,7 @@ var requestHandler = function(request, response) {
       statusCode = 200;
       response.writeHead(statusCode, headers);
       response.end(JSON.stringify({
-      results: messages
+        results: messages
       }));  
     }
     
@@ -63,7 +63,7 @@ var requestHandler = function(request, response) {
     var statusCode = 201;
     var headers = defaultCorsHeaders;
     
-    var body = "";
+    var body = '' ;
     request.on('data', function(chunk) {
       body += chunk;
     });
@@ -77,12 +77,10 @@ var requestHandler = function(request, response) {
     });
     console.log('MESSAGES: ', messages);
     
-  }
-  else if (request.method === 'OPTIONS') {
+  } else if (request.method === 'OPTIONS') {
     response.writeHead(200, defaultCorsHeaders);
     response.end();
-  }
- 
+  } 
 };
 
 exports.requestHandler = requestHandler;
